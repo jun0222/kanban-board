@@ -3,30 +3,30 @@ import Amplify, { Auth } from "aws-amplify";
 import API, { graphqlOperation } from '@aws-amplify/api';
 import awsmobile from "../aws-exports";
 import { withAuthenticator } from "aws-amplify-react";
-// import { createTodo } from '../graphql/mutations';
-// import { listTodos } from '../graphql/queries';
-// import { onCreateTodo } from '../graphql/subscriptions';
+import { createTodo } from '../graphql/mutations';
+import { listTodos } from '../graphql/queries';
+import { onCreateTodo } from '../graphql/subscriptions';
 
 // Amplifyの設定を行う
 Amplify.configure(awsmobile)
 
-// const GET = 'GET';
-// const CREATE = 'CREATE';
+const GET = 'GET';
+const CREATE = 'CREATE';
 
-// const initialState = {
-//   todos: [],
-// };
+const initialState = {
+  todos: [],
+};
 
-// const reducer = (state: any, action: any) => {
-//   switch (action.type) {
-//     case GET:
-//       return {...state, todos: action.todos};
-//     case CREATE:
-//       return {...state, todos:[...state.todos, action.todo]}
-//     default:
-//       return state;
-//   }
-// };
+const reducer = (state: any, action: any) => {
+  switch (action.type) {
+    case GET:
+      return {...state, todos: action.todos};
+    case CREATE:
+      return {...state, todos:[...state.todos, action.todo]}
+    default:
+      return state;
+  }
+};
 
 // SingUp時に、メールアドレスとパスワードを要求する
 const signUpConfig = {
@@ -66,62 +66,61 @@ function signOut(){
 }
 
 function App() {
-  // const [state, dispatch] = useReducer(reducer, initialState);
-  // const [user, setUser]: any = useState();
-  // const [title, setTitle] = useState('');
-  // const [detail, setDetail] = useState('');
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [user, setUser]: any = useState();
+  const [title, setTitle] = useState('');
+  const [detail, setDetail] = useState('');
 
-  // function onChange(e: any){
-  //   if(e.target.id === 'title'){
-  //     setTitle(e.target.value);
-  //   }
-  //   if(e.target.id === 'detail'){
-  //     setDetail(e.target.value);
-  //   }
-  // }
+  function onChange(e: any){
+    if(e.target.id === 'title'){
+      setTitle(e.target.value);
+    }
+    if(e.target.id === 'detail'){
+      setDetail(e.target.value);
+    }
+  }
 
-  // async function create(e: any) {
-  //   e.preventDefault();
-  //   setTitle('')
-  //   setDetail('')
-  //   const todo = { title:title, detail:detail };
-  //   await API.graphql(graphqlOperation(createTodo, { input: todo }));
-  // }
+  async function create(e: any) {
+    e.preventDefault();
+    setTitle('')
+    setDetail('')
+    const todo = { title:title, detail:detail };
+    await API.graphql(graphqlOperation(createTodo, { input: todo }));
+  }
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   async function getUser(){
-  //     const user: any = await Auth.currentUserInfo();
-  //     setUser(user);
-  //     return user
-  //   }
+    async function getUser(){
+      const user: any = await Auth.currentUserInfo();
+      setUser(user);
+      return user
+    }
 
-  //   getUser();
+    getUser();
 
-  //   async function getData() {
-  //     const todoData: any = await API.graphql(graphqlOperation(listTodos));
-  //     dispatch({ type: GET, todos: todoData.data.listTodos.items });
-  //   }
+    async function getData() {
+      const todoData: any = await API.graphql(graphqlOperation(listTodos));
+      dispatch({ type: GET, todos: todoData.data.listTodos.items });
+    }
 
-  //   getData();
+    getData();
 
-  //   const client = API.graphql(graphqlOperation(onCreateTodo));
-  //   ((client: any) => {
-  //     const subscription = client.subscribe({
-  //       next: (eventData: any) => {
-  //         const todo = eventData.value.data.onCreateTodo;
-  //         dispatch({ type: CREATE, todo });
-  //       }
-  //     });
-  //     return () => subscription.unsubscribe();
-  //   })(client);
-  // }, []);
+    const client = API.graphql(graphqlOperation(onCreateTodo));
+    ((client: any) => {
+      const subscription = client.subscribe({
+        next: (eventData: any) => {
+          const todo = eventData.value.data.onCreateTodo;
+          dispatch({ type: CREATE, todo });
+        }
+      });
+      return () => subscription.unsubscribe();
+    })(client);
+  }, []);
 
 
   return (
     <div className="App">
-      <button onClick={signOut}>Sign out</button>
-      {/* <p>user: {user!= null && user.username}</p>
+      <p>user: {user!= null && user.username}</p>
       <button onClick={signOut}>Sign out</button>
       <div>
         <table>
@@ -148,7 +147,7 @@ function App() {
             )
           })}
         </table>
-      </div> */}
+      </div>
     </div>
   );
 }

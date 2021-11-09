@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "kanbanboard",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authkanbanboarde7e0cdf8",
+      "Outputs.UserPoolId"
+    ]
+  }
+}
