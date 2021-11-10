@@ -17,7 +17,21 @@ const initialState = {
   todos: [],
 };
 
-const reducer = (state: any, action: any) => {
+type Todo = {
+  id: string,
+  title: string,
+  detail: string,
+  createdAt: string,
+  updatedAt: string
+}
+
+type Action = {
+  todo: Todo,
+  todos: [],
+  type: 'GET' | 'CREATE'
+}
+
+const reducer = (state: {todos: []}, action: Action) => {
   switch (action.type) {
     case GET:
       return {...state, todos: action.todos};
@@ -67,11 +81,12 @@ function signOut(){
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [user, setUser]: any = useState();
+  const [user, setUser] = useState({attributes: {}, id: '', username: ''});
   const [title, setTitle] = useState('');
   const [detail, setDetail] = useState('');
 
-  function onChange(e: any){
+  function onChange(e: {target: {id: string, value: string}}){
+    console.log(e.target.id)
     if(e.target.id === 'title'){
       setTitle(e.target.value);
     }
@@ -91,7 +106,7 @@ function App() {
   useEffect(() => {
 
     async function getUser(){
-      const user: any = await Auth.currentUserInfo();
+      const user: {attributes: {}, id: string, username: string} = await Auth.currentUserInfo();
       setUser(user);
       return user
     }
@@ -136,7 +151,7 @@ function App() {
             <td><input id='detail' type='text' onChange={onChange} value={detail}/></td>
             <th><button onClick={create}>New</button></th>
           </tr>
-          {state.todos && state.todos.map((todo: any, index: any) => {
+          {state.todos && state.todos.map((todo: Todo, index: number) => {
             return(
               <tr key={todo.id}>
                 <td>{index + 1}</td>
