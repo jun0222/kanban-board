@@ -13,10 +13,6 @@ Amplify.configure(awsmobile)
 const GET = 'GET';
 const CREATE = 'CREATE';
 
-const initialState = {
-  todos: [],
-};
-
 type Todo = {
   id: string,
   title: string,
@@ -40,6 +36,10 @@ const reducer = (state: {todos: []}, action: Action) => {
     default:
       return state;
   }
+};
+
+const initialState = {
+  todos: [],
 };
 
 // SingUp時に、メールアドレスとパスワードを要求する
@@ -95,7 +95,7 @@ function App() {
     }
   }
 
-  async function create(e: any) {
+  async function create(e: Event) {
     e.preventDefault();
     setTitle('')
     setDetail('')
@@ -114,7 +114,7 @@ function App() {
     getUser();
 
     async function getData() {
-      const todoData: any = await API.graphql(graphqlOperation(listTodos));
+      const todoData = await API.graphql(graphqlOperation(listTodos));
       dispatch({ type: GET, todos: todoData.data.listTodos.items });
     }
 
