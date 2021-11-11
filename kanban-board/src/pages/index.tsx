@@ -21,13 +21,7 @@ type Todo = {
   updatedAt: string
 }
 
-type Action = {
-  todo: Todo,
-  todos: [],
-  type: 'GET' | 'CREATE'
-}
-
-const reducer = (state: {todos: []}, action: Action) => {
+const reducer = (state: {todos: []}, action: any) => {
   switch (action.type) {
     case GET:
       return {...state, todos: action.todos};
@@ -86,7 +80,6 @@ function App() {
   const [detail, setDetail] = useState('');
 
   function onChange(e: {target: {id: string, value: string}}){
-    console.log(e.target.id)
     if(e.target.id === 'title'){
       setTitle(e.target.value);
     }
@@ -95,7 +88,7 @@ function App() {
     }
   }
 
-  async function create(e: Event) {
+  async function create(e: any) {
     e.preventDefault();
     setTitle('')
     setDetail('')
@@ -114,7 +107,7 @@ function App() {
     getUser();
 
     async function getData() {
-      const todoData = await API.graphql(graphqlOperation(listTodos));
+      const todoData: any = await API.graphql(graphqlOperation(listTodos));
       dispatch({ type: GET, todos: todoData.data.listTodos.items });
     }
 
