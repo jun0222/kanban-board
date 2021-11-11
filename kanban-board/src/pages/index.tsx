@@ -73,7 +73,7 @@ function signOut(){
   .catch();
 }
 
-function App() {
+const Home = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [user, setUser] = useState({attributes: {}, id: '', username: ''});
   const [title, setTitle] = useState('');
@@ -161,4 +161,4 @@ function App() {
 }
 
 // Appコンポーネントをラップする
-export default withAuthenticator(App, false, [], null, {signUpConfig});
+export default withAuthenticator(Home, false, [], null, {signUpConfig});
