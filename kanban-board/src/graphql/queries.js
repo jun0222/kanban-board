@@ -30,3 +30,61 @@ export const listTodos = /* GraphQL */ `
     }
   }
 `;
+export const getColumn = /* GraphQL */ `
+  query GetColumn($id: ID!) {
+    getColumn(id: $id) {
+      id
+      title
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listColumns = /* GraphQL */ `
+  query ListColumns(
+    $filter: ModelColumnFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listColumns(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getCard = /* GraphQL */ `
+  query GetCard($id: ID!) {
+    getCard(id: $id) {
+      id
+      columnId
+      title
+      detail
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listCards = /* GraphQL */ `
+  query ListCards(
+    $filter: ModelCardFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCards(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        columnId
+        title
+        detail
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;

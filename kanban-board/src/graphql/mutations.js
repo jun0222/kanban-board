@@ -43,3 +43,87 @@ export const deleteTodo = /* GraphQL */ `
     }
   }
 `;
+export const createColumn = /* GraphQL */ `
+  mutation CreateColumn(
+    $input: CreateColumnInput!
+    $condition: ModelColumnConditionInput
+  ) {
+    createColumn(input: $input, condition: $condition) {
+      id
+      title
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateColumn = /* GraphQL */ `
+  mutation UpdateColumn(
+    $input: UpdateColumnInput!
+    $condition: ModelColumnConditionInput
+  ) {
+    updateColumn(input: $input, condition: $condition) {
+      id
+      title
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteColumn = /* GraphQL */ `
+  mutation DeleteColumn(
+    $input: DeleteColumnInput!
+    $condition: ModelColumnConditionInput
+  ) {
+    deleteColumn(input: $input, condition: $condition) {
+      id
+      title
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createCard = /* GraphQL */ `
+  mutation CreateCard(
+    $input: CreateCardInput!
+    $condition: ModelCardConditionInput
+  ) {
+    createCard(input: $input, condition: $condition) {
+      id
+      columnId
+      title
+      detail
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateCard = /* GraphQL */ `
+  mutation UpdateCard(
+    $input: UpdateCardInput!
+    $condition: ModelCardConditionInput
+  ) {
+    updateCard(input: $input, condition: $condition) {
+      id
+      columnId
+      title
+      detail
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteCard = /* GraphQL */ `
+  mutation DeleteCard(
+    $input: DeleteCardInput!
+    $condition: ModelCardConditionInput
+  ) {
+    deleteCard(input: $input, condition: $condition) {
+      id
+      columnId
+      title
+      detail
+      createdAt
+      updatedAt
+    }
+  }
+`;

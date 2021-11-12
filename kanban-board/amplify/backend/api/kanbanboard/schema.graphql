@@ -5,3 +5,17 @@ type Todo @model {
     createdAt: AWSDateTime
     updatedAt: AWSDateTime
 }
+type Column @model {
+    id: ID!
+    title: String!
+    createdAt: AWSDateTime
+    updatedAt: AWSDateTime
+}
+type Card @model {
+    id: ID!
+    columnId: Int!
+    title: String!
+    detail: String!
+    createdAt: AWSDateTime
+    updatedAt: AWSDateTime
+}
