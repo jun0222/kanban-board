@@ -8,6 +8,8 @@ import { listTodos } from '../graphql/queries';
 import { onCreateTodo } from '../graphql/subscriptions';
 import styled, { createGlobalStyle } from 'styled-components';
 import * as color from './_color';
+import { Header } from './Header';
+import { Column } from './Column';
 
 // Amplifyの設定を行う
 Amplify.configure(awsmobile)
@@ -164,38 +166,30 @@ const Home = () => {
       <div>
       <GlobalStyle />
       <Container>
-        <Header>
-          <Logo>Kanban board</Logo>
-
-          <CardFilter placeholder="Filter cards" />
-        </Header>
+        <Header />
 
         <MainArea>
           <HorizontalScroll>
-            <Column>
-              <ColumnHeader>TODO</ColumnHeader>
-
-              <Card>朝食をとる🍞</Card>
-              <Card>SNSをチェックする🐦</Card>
-              <Card>布団に入る (:3[___]</Card>
-            </Column>
-
-            <Column>
-              <ColumnHeader>Doing</ColumnHeader>
-
-              <Card>顔を洗う👐</Card>
-              <Card>歯を磨く🦷</Card>
-            </Column>
-
-            <Column>
-              <ColumnHeader>Waiting</ColumnHeader>
-            </Column>
-
-            <Column>
-              <ColumnHeader>Done</ColumnHeader>
-
-              <Card>布団から出る (:3っ)っ -=三[＿＿]</Card>
-            </Column>
+          <Column
+            title="TODO"
+            cards={[
+              { id: 'a', text: '朝食をとる🍞' },
+              { id: 'b', text: 'SNSをチェックする🐦' },
+              { id: 'c', text: '布団に入る (:3[___]' },
+            ]}
+          />
+          <Column
+            title="Doing"
+            cards={[
+              { id: 'd', text: '顔を洗う👐' },
+              { id: 'e', text: '歯を磨く🦷' },
+            ]}
+          />
+          <Column title="Waiting" cards={[]} />
+          <Column
+            title="Done"
+            cards={[{ id: 'f', text: '布団から出る (:3っ)っ -=三[＿＿]' }]}
+          />
           </HorizontalScroll>
         </MainArea>
       </Container>
@@ -222,18 +216,6 @@ const Container = styled.div`
 display: flex;
 flex-flow: column;
 height: 100%;
-`
-
-const Header = styled.div`
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding: 8px 16px;
-background-color: ${color.Navy};
-flex-shrink: 0;
-color: ${color.Silver};
-font-size: 16px;
-font-weight: bold;
 `
 
 const Logo = styled.div`
@@ -271,20 +253,6 @@ overflow-x: auto;
   display: block;
   flex: 0 0 16px;
   content: '';
-}
-`
-
-const Column = styled.div`
-display: flex;
-flex-flow: column;
-width: 355px;
-height: 100%;
-border: solid 1px ${color.Silver};
-border-radius: 6px;
-background-color: ${color.LightSilver};
-
-> :not(:last-child) {
-  flex-shrink: 0;
 }
 `
 
