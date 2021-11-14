@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import * as color from './_color'
 import { Button, ConfirmButton } from './Button'
@@ -21,10 +21,12 @@ export function InputForm({
         if (disabled) return
         onConfirm?.()
     }
+    const ref = useAutoFitToContentHeight(value)
 
     return (
         <Container className={className}>
         <Input
+            ref={ref}
             autoFocus
             placeholder="Enter a note"
             value={value}
@@ -77,3 +79,29 @@ const AddButton = styled(ConfirmButton).attrs({
 const CancelButton = styled(Button).attrs({
   children: 'Cancel',
 })``
+
+
+/**
+  * テキストエリアの高さを内容に合わせて自動調整する
+  *
+  * @param content テキストエリアの内容
+  */
+function useAutoFitToContentHeight(content: string | undefined) {
+    const ref = useRef<HTMLTextAreaElement>(null)
+    
+    useEffect(
+        () => {
+        const el = ref.current
+        if (!el) return
+    
+        const { borderTopWidth, borderBottomWidth } = getComputedStyle(el)
+        el.style.height = 'auto' // 一度 auto にしないと高さが縮まなくなる
+        el.style.height = `calc(${borderTopWidth} + ${el.scrollHeight}px + ${borderBottomWidth})`
+        },
+        // 内容が変わるたびに高さを再計算
+        [content],
+    )
+    
+    return ref
+    }
+    
