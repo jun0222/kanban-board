@@ -8,12 +8,16 @@ import { InputForm } from './InputForm'
 export function Column({
     title,
     cards,
+    onCardDragStart,
+    onCardDrop
 }: {
     title?: string
     cards: {
         id: string
         text?: string
     }[]
+    onCardDragStart?(id: string): void
+    onCardDrop?(entered: string | null): void
 }) {
     const totalCount = cards.length
     const [text, setText] = useState('')
@@ -21,6 +25,14 @@ export function Column({
     const toggleInput = () => setInputMode(v => !v)
     const confirmInput = () => setText('')
     const cancelInput = () => setInputMode(false)
+
+    const [draggingCardID, setDraggingCardID] = useState<string | undefined>(
+        undefined,
+    )
+    const handleCardDragStart = (id: string) => {
+        setDraggingCardID(id)
+        onCardDragStart?.(id)
+    }
 
     return (
         <Container>
@@ -41,9 +53,31 @@ export function Column({
         )}
 
         <VerticalScroll>
-            {cards.map(({ id, text }) => (
-            <Card key={id} text={text} />
+        {cards.map(({ id, text }, i) => (
+            <Card.DropArea
+                key={id}
+                disabled={
+                    draggingCardID !== undefined &&
+                    (id === draggingCardID || cards[i - 1]?.id === draggingCardID)
+                }
+                onDrop={() => onCardDrop?.(id)}
+            >
+                <Card
+                    text={text}
+                    onDragStart={() => handleCardDragStart(id)}
+                    onDragEnd={() => setDraggingCardID(undefined)}
+                />
+            </Card.DropArea>
             ))}
+
+            <Card.DropArea
+                style={{ height: '100%' }}
+                disabled={
+                    draggingCardID !== undefined &&
+                    cards[cards.length - 1]?.id === draggingCardID
+                }
+                onDrop={() => onCardDrop?.(null)}
+            />
         </VerticalScroll>
         </Container>
     )
