@@ -4,7 +4,7 @@ import API, { graphqlOperation } from '@aws-amplify/api';
 import awsmobile from "../aws-exports";
 import { withAuthenticator } from "aws-amplify-react";
 import { createTodo } from '../graphql/mutations';
-import { listTodos } from '../graphql/queries';
+import { listCards, listTodos } from '../graphql/queries';
 import { onCreateTodo } from '../graphql/subscriptions';
 import styled, { createGlobalStyle } from 'styled-components';
 import * as color from './_color';
@@ -192,8 +192,8 @@ const Home = () => {
     getUser();
 
     async function getData() {
-      const todoData: any = await API.graphql(graphqlOperation(listTodos));
-      dispatch({ type: GET, todos: todoData.data.listTodos.items });
+      const todoCard: any = await API.graphql(graphqlOperation(listCards));
+      dispatch({ type: GET, todos: todoCard.data.listCards.items });
     }
 
     getData();
@@ -214,7 +214,7 @@ const Home = () => {
   return (
     <div className="App">
       {/* 簡易todo用UI */}
-      {/* <p>user: {user!= null && user.username}</p>
+      <p>user: {user!= null && user.username}</p>
       <button onClick={signOut}>Sign out</button>
       <div>
         <table>
@@ -241,7 +241,7 @@ const Home = () => {
             )
           })}
         </table>
-      </div> */}
+      </div>
 
       {/* カンバンボード用UI */}
       <div>
