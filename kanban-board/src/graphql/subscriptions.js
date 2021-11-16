@@ -68,7 +68,6 @@ export const onCreateCard = /* GraphQL */ `
   subscription OnCreateCard {
     onCreateCard {
       id
-      columnId
       title
       detail
       createdAt
@@ -80,7 +79,6 @@ export const onUpdateCard = /* GraphQL */ `
   subscription OnUpdateCard {
     onUpdateCard {
       id
-      columnId
       title
       detail
       createdAt
@@ -92,7 +90,6 @@ export const onDeleteCard = /* GraphQL */ `
   subscription OnDeleteCard {
     onDeleteCard {
       id
-      columnId
       title
       detail
       createdAt

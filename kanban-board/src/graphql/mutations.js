@@ -89,7 +89,6 @@ export const createCard = /* GraphQL */ `
   ) {
     createCard(input: $input, condition: $condition) {
       id
-      columnId
       title
       detail
       createdAt
@@ -104,7 +103,6 @@ export const updateCard = /* GraphQL */ `
   ) {
     updateCard(input: $input, condition: $condition) {
       id
-      columnId
       title
       detail
       createdAt
@@ -119,7 +117,6 @@ export const deleteCard = /* GraphQL */ `
   ) {
     deleteCard(input: $input, condition: $condition) {
       id
-      columnId
       title
       detail
       createdAt

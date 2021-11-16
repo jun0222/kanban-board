@@ -2,6 +2,8 @@ import React, { useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import * as color from './_color'
 import { Button, ConfirmButton } from './Button'
+import API, { graphqlOperation } from '@aws-amplify/api'
+import { createCard } from '../graphql/mutations'
 
 export function InputForm({
     value,
@@ -17,9 +19,12 @@ export function InputForm({
     className?: string
 }) {
     const disabled = !value?.trim()
-    const handleConfirm = () => {
+    const handleConfirm = async () => {
         if (disabled) return
         onConfirm?.()
+        const detail = ref.current.value;
+        const card = {title: "title不要、削除予定", detail: detail };
+        await API.graphql(graphqlOperation(createCard, { input: card }));
     }
     const ref = useAutoFitToContentHeight(value)
 
