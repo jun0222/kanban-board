@@ -1,6 +1,39 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateCard = /* GraphQL */ `
+  subscription OnCreateCard {
+    onCreateCard {
+      id
+      title
+      detail
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateCard = /* GraphQL */ `
+  subscription OnUpdateCard {
+    onUpdateCard {
+      id
+      title
+      detail
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteCard = /* GraphQL */ `
+  subscription OnDeleteCard {
+    onDeleteCard {
+      id
+      title
+      detail
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateTodo = /* GraphQL */ `
   subscription OnCreateTodo {
     onCreateTodo {
@@ -39,6 +72,8 @@ export const onCreateColumn = /* GraphQL */ `
     onCreateColumn {
       id
       title
+      text
+      cards
       createdAt
       updatedAt
     }
@@ -49,6 +84,8 @@ export const onUpdateColumn = /* GraphQL */ `
     onUpdateColumn {
       id
       title
+      text
+      cards
       createdAt
       updatedAt
     }
@@ -59,39 +96,8 @@ export const onDeleteColumn = /* GraphQL */ `
     onDeleteColumn {
       id
       title
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateCard = /* GraphQL */ `
-  subscription OnCreateCard {
-    onCreateCard {
-      id
-      title
-      detail
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateCard = /* GraphQL */ `
-  subscription OnUpdateCard {
-    onUpdateCard {
-      id
-      title
-      detail
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteCard = /* GraphQL */ `
-  subscription OnDeleteCard {
-    onDeleteCard {
-      id
-      title
-      detail
+      text
+      cards
       createdAt
       updatedAt
     }

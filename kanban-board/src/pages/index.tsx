@@ -4,12 +4,13 @@ import API, { graphqlOperation } from '@aws-amplify/api';
 import awsmobile from "../aws-exports";
 import { withAuthenticator } from "aws-amplify-react";
 import { createTodo } from '../graphql/mutations';
-import { listCards, listTodos } from '../graphql/queries';
+import { listCards, listTodos, listColumns } from '../graphql/queries';
 import { onCreateTodo } from '../graphql/subscriptions';
 import styled, { createGlobalStyle } from 'styled-components';
 import * as color from './_color';
 import { Header } from './Header';
 import { Column } from './Column';
+import produce from 'immer';
 
 // Amplifyの設定を行う
 Amplify.configure(awsmobile)
@@ -24,6 +25,17 @@ type Todo = {
   createdAt: string,
   updatedAt: string
 }
+
+type Columns = {
+  id: string
+  title?: string
+  text?: string
+  cards?: {
+    id: string
+    text?: string
+  }[]
+}[]
+
 
 const reducer = (state: {todos: []}, action: any) => {
   switch (action.type) {
@@ -78,35 +90,7 @@ function signOut(){
 }
 
 const Home = () => {
-  const [columns, setColumns] = useState([
-    {
-      id: 'A',
-      title: 'TODO',
-      cards: [
-        { id: 'a', text: '朝食をとる🍞' },
-        { id: 'b', text: 'SNSをチェックする🐦' },
-        { id: 'c', text: '布団に入る (:3[___]' },
-      ],
-    },
-    {
-      id: 'B',
-      title: 'Doing',
-      cards: [
-        { id: 'd', text: '顔を洗う👐' },
-        { id: 'e', text: '歯を磨く🦷' },
-      ],
-    },
-    {
-      id: 'C',
-      title: 'Waiting',
-      cards: [],
-    },
-    {
-      id: 'D',
-      title: 'Done',
-      cards: [{ id: 'f', text: '布団から出る (:3っ)っ -=三[＿＿]' }],
-    },
-  ])
+  const [columns, setColumns] = useState<Columns>([])
 
   const [draggingCardID, setDraggingCardID] = useState<string | undefined>(
     undefined,
@@ -159,6 +143,7 @@ const Home = () => {
   }
 
 
+
   const [state, dispatch] = useReducer(reducer, initialState);
   const [user, setUser] = useState({attributes: {}, id: '', username: ''});
   const [title, setTitle] = useState('');
@@ -183,6 +168,16 @@ const Home = () => {
 
   useEffect(() => {
 
+    ;(async () => {
+      const todoColumns: any = await API.graphql(graphqlOperation(listColumns));
+      
+        todoColumns.data.listColumns.items.forEach(item => {
+          item.cards=[]
+        })
+        setColumns(todoColumns.data.listColumns.items)
+
+    })()
+
     async function getUser(){
       const user: {attributes: {}, id: string, username: string} = await Auth.currentUserInfo();
       setUser(user);
@@ -197,6 +192,13 @@ const Home = () => {
     }
 
     getData();
+
+    async function getColumn() {
+      const todoColumns: any = await API.graphql(graphqlOperation(listCards));
+      dispatch({ type: GET, columns: todoColumns.data });
+    }
+
+    getColumn();
 
     const client = API.graphql(graphqlOperation(onCreateTodo));
     ((client: any) => {
@@ -249,6 +251,7 @@ const Home = () => {
       <Container>
         <Header />
 
+{/* // {console.log("こここここ",columns)} */}
         <MainArea>
           <HorizontalScroll>
           {columns.map(({ id: columnID, title, cards }) => (
