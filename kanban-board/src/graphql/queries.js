@@ -5,8 +5,7 @@ export const getCard = /* GraphQL */ `
   query GetCard($id: ID!) {
     getCard(id: $id) {
       id
-      title
-      detail
+      text
       createdAt
       updatedAt
     }
@@ -21,8 +20,7 @@ export const listCards = /* GraphQL */ `
     listCards(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        title
-        detail
+        text
         createdAt
         updatedAt
       }

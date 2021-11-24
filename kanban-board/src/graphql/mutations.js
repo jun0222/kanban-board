@@ -8,8 +8,7 @@ export const createCard = /* GraphQL */ `
   ) {
     createCard(input: $input, condition: $condition) {
       id
-      title
-      detail
+      text
       createdAt
       updatedAt
     }
@@ -22,8 +21,7 @@ export const updateCard = /* GraphQL */ `
   ) {
     updateCard(input: $input, condition: $condition) {
       id
-      title
-      detail
+      text
       createdAt
       updatedAt
     }
@@ -36,8 +34,7 @@ export const deleteCard = /* GraphQL */ `
   ) {
     deleteCard(input: $input, condition: $condition) {
       id
-      title
-      detail
+      text
       createdAt
       updatedAt
     }

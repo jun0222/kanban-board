@@ -170,9 +170,10 @@ const Home = () => {
 
     ;(async () => {
       const todoColumns: any = await API.graphql(graphqlOperation(listColumns));
-      
+
+      const unorderedCards: any = await API.graphql(graphqlOperation(listCards));
         todoColumns.data.listColumns.items.forEach(item => {
-          item.cards=[]
+          item.cards=unorderedCards.data.listCards.items
         })
         setColumns(todoColumns.data.listColumns.items)
 
@@ -215,43 +216,13 @@ const Home = () => {
 
   return (
     <div className="App">
-      {/* 簡易todo用UI */}
+      {/* カンバンボード用UI */}
       <p>user: {user!= null && user.username}</p>
       <button onClick={signOut}>Sign out</button>
-      <div>
-        <table>
-          <tr>
-            <th>No</th>
-            <th>Title</th>
-            <th>Detail</th>
-            <th></th>
-          </tr>
-          <tr>
-            <td></td>
-            <td><input id='title' type='text' onChange={onChange} value={title}/></td>
-            <td><input id='detail' type='text' onChange={onChange} value={detail}/></td>
-            <th><button onClick={create}>New</button></th>
-          </tr>
-          {state.todos && state.todos.map((todo: Todo, index: number) => {
-            return(
-              <tr key={todo.id}>
-                <td>{index + 1}</td>
-                <td>{todo.title}</td>
-                <td>{todo.detail}</td>
-                <td>{todo.createdAt}</td>
-              </tr>
-            )
-          })}
-        </table>
-      </div>
-
-      {/* カンバンボード用UI */}
       <div>
       <GlobalStyle />
       <Container>
         <Header />
-
-{/* // {console.log("こここここ",columns)} */}
         <MainArea>
           <HorizontalScroll>
           {columns.map(({ id: columnID, title, cards }) => (

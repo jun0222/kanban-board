@@ -5,8 +5,7 @@ export const onCreateCard = /* GraphQL */ `
   subscription OnCreateCard {
     onCreateCard {
       id
-      title
-      detail
+      text
       createdAt
       updatedAt
     }
@@ -16,8 +15,7 @@ export const onUpdateCard = /* GraphQL */ `
   subscription OnUpdateCard {
     onUpdateCard {
       id
-      title
-      detail
+      text
       createdAt
       updatedAt
     }
@@ -27,8 +25,7 @@ export const onDeleteCard = /* GraphQL */ `
   subscription OnDeleteCard {
     onDeleteCard {
       id
-      title
-      detail
+      text
       createdAt
       updatedAt
     }

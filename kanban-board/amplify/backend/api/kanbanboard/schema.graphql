@@ -1,7 +1,6 @@
 type Card @model {
     id: ID!
-    title: String!
-    detail: String!
+    text: String!
     createdAt: AWSDateTime
     updatedAt: AWSDateTime
 }
