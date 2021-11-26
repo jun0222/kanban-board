@@ -4,13 +4,14 @@ import API, { graphqlOperation } from '@aws-amplify/api';
 import awsmobile from "../aws-exports";
 import { withAuthenticator } from "aws-amplify-react";
 import { createTodo } from '../graphql/mutations';
-import { listCards, listTodos, listColumns } from '../graphql/queries';
+import { listCards, listTodos, listColumns, listOrders } from '../graphql/queries';
 import { onCreateTodo } from '../graphql/subscriptions';
 import styled, { createGlobalStyle } from 'styled-components';
 import * as color from './_color';
 import { Header } from './Header';
 import { Column } from './Column';
 import produce from 'immer';
+import { randomID, sortBy } from './_util'
 
 // Amplifyの設定を行う
 Amplify.configure(awsmobile)
@@ -170,10 +171,17 @@ const Home = () => {
 
     ;(async () => {
       const todoColumns: any = await API.graphql(graphqlOperation(listColumns));
-
       const unorderedCards: any = await API.graphql(graphqlOperation(listCards));
+      const cardsOrder: any = await API.graphql(graphqlOperation(listOrders));
+
+      // { item.id: item.next, item.id: item.next..... } 形式のオブジェクトを生成
+      let cardsOrderShaped: any = {}
+      cardsOrder.data.listOrders.items.forEach(item => {
+        cardsOrderShaped[item.id] = item.next
+      })
+      
         todoColumns.data.listColumns.items.forEach(item => {
-          item.cards=unorderedCards.data.listCards.items
+          item.cards = sortBy(unorderedCards.data.listCards.items, cardsOrderShaped, item.id)
         })
         setColumns(todoColumns.data.listColumns.items)
 

@@ -19,3 +19,9 @@ type Column @model {
     createdAt: AWSDateTime
     updatedAt: AWSDateTime
 }
+type Order @model {
+    id: String!
+    next: String!
+    createdAt: AWSDateTime
+    updatedAt: AWSDateTime
+}
