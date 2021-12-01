@@ -3,7 +3,9 @@ import styled from 'styled-components'
 import * as color from './_color'
 import { Button, ConfirmButton } from './Button'
 import API, { graphqlOperation } from '@aws-amplify/api'
-import { createCard } from '../graphql/mutations'
+import { createCard, createOrder } from '../graphql/mutations'
+import { listOrders } from '../graphql/queries'
+import { randomID } from './_util'
 
 export function InputForm({
     value,
@@ -19,14 +21,28 @@ export function InputForm({
     className?: string
 }) {
     const disabled = !value?.trim()
-    const handleConfirm = async () => {
-        if (disabled) return
-        onConfirm?.()
-        const detail = ref.current.value;
-        const card = {title: "title不要、削除予定", detail: detail };
-        await API.graphql(graphqlOperation(createCard, { input: card }));
-    }
-    const ref = useAutoFitToContentHeight(value)
+    const handleConfirm = async () => {
+        if (disabled) return
+        onConfirm?.()
+
+        const cardsOrder: any = await API.graphql(graphqlOperation(listOrders));
+
+        // { item.id: item.next, item.id: item.next..... } 形式のオブジェクトを生成
+        let cardsOrderShaped: any = {}
+        let lastNext: any = ""
+        cardsOrder.data.listOrders.items.forEach(item => {
+            lastNext = item.next
+            cardsOrderShaped[item.id] = item.next
+        })
+        console.log(lastNext)
+
+        const text = ref.current.value;
+        const card = {id: randomID,text: text};
+        const order = {id: randomID, next: "next"}
+        await API.graphql(graphqlOperation(createCard, { input: card }));
+        await API.graphql(graphqlOperation(createOrder, { input: order }));
+    }
+    const ref = useAutoFitToContentHeight(value)
 
     return (
         <Container className={className}>

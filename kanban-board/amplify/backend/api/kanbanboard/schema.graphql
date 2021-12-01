@@ -20,8 +20,8 @@ type Column @model {
     updatedAt: AWSDateTime
 }
 type Order @model {
-    id: String!
-    next: String!
+    id: ID!
+    next: ID!
     createdAt: AWSDateTime
     updatedAt: AWSDateTime
 }
