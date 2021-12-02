@@ -25,21 +25,23 @@ export function InputForm({
         if (disabled) return
         onConfirm?.()
 
-        const cardsOrder: any = await API.graphql(graphqlOperation(listOrders));
+        const newCardID = randomID();
 
+        // cardのレコード登録
+        const text = ref.current.value;
+        const card = {id: newCardID, text: text};
+        await API.graphql(graphqlOperation(createCard, { input: card }));
+
+        // orderのレコード登録
+        const cardsOrder: any = await API.graphql(graphqlOperation(listOrders));
         // { item.id: item.next, item.id: item.next..... } 形式のオブジェクトを生成
         let cardsOrderShaped: any = {}
-        let lastNext: any = ""
+        let existOrderLatestNext: any = ""
         cardsOrder.data.listOrders.items.forEach(item => {
-            lastNext = item.next
+            existOrderLatestNext = item.next
             cardsOrderShaped[item.id] = item.next
         })
-        console.log(lastNext)
-
-        const text = ref.current.value;
-        const card = {id: randomID,text: text};
-        const order = {id: randomID, next: "next"}
-        await API.graphql(graphqlOperation(createCard, { input: card }));
+        const order = {id: existOrderLatestNext, next: newCardID}
         await API.graphql(graphqlOperation(createOrder, { input: order }));
     }
     const ref = useAutoFitToContentHeight(value)

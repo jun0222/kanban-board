@@ -21,7 +21,7 @@ type Column @model {
 }
 type Order @model {
     id: ID!
-    next: ID!
+    next: String!
     createdAt: AWSDateTime
     updatedAt: AWSDateTime
 }
