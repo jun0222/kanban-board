@@ -6,11 +6,13 @@ import { PlusIcon } from './icon'
 import { InputForm } from './InputForm'
 
 export function Column({
+    cid,
     title,
     cards,
     onCardDragStart,
     onCardDrop
 }: {
+    cid: string
     title?: string
     cards: {
         id: string
@@ -45,6 +47,7 @@ export function Column({
 
         {inputMode && (
             <InputForm
+                cid={cid}
                 value={text}
                 onChange={setText}
                 onConfirm={confirmInput}

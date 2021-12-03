@@ -8,12 +8,14 @@ import { listOrders } from '../graphql/queries'
 import { randomID } from './_util'
 
 export function InputForm({
+    cid,
     value,
     onChange,
     onConfirm,
     onCancel,
     className,
 }: {
+    cid: string
     value?: string
     onChange?(value: string): void
     onConfirm?(): void
@@ -33,8 +35,9 @@ export function InputForm({
         await API.graphql(graphqlOperation(createCard, { input: card }));
 
         // orderのレコード登録
+
+        // すでにレコードが有る場合
         const cardsOrder: any = await API.graphql(graphqlOperation(listOrders));
-        // { item.id: item.next, item.id: item.next..... } 形式のオブジェクトを生成
         let cardsOrderShaped: any = {}
         let existOrderLatestNext: any = ""
         cardsOrder.data.listOrders.items.forEach(item => {
@@ -43,6 +46,12 @@ export function InputForm({
         })
         const order = {id: existOrderLatestNext, next: newCardID}
         await API.graphql(graphqlOperation(createOrder, { input: order }));
+
+        // まだレコードが無い場合
+        console.log(cid)
+        // 触ったカラムのIDをとる
+        // const order = {id: カラムのID, next: newCardID}
+        // await API.graphql(graphqlOperation(createOrder, { input: order }));
     }
     const ref = useAutoFitToContentHeight(value)
 

@@ -236,6 +236,7 @@ const Home = () => {
           {columns.map(({ id: columnID, title, cards }) => (
             <Column
               key={columnID}
+              cid={columnID}
               title={title}
               cards={cards}
               onCardDragStart={cardID => setDraggingCardID(cardID)}
