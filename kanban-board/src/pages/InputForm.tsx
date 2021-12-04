@@ -4,7 +4,7 @@ import * as color from './_color'
 import { Button, ConfirmButton } from './Button'
 import API, { graphqlOperation } from '@aws-amplify/api'
 import { createCard, createOrder } from '../graphql/mutations'
-import { listOrders } from '../graphql/queries'
+import { listOrders, getOrder } from '../graphql/queries'
 import { randomID } from './_util'
 
 export function InputForm({
@@ -23,37 +23,37 @@ export function InputForm({
     className?: string
 }) {
     const disabled = !value?.trim()
-    const handleConfirm = async () => {
-        if (disabled) return
-        onConfirm?.()
+    const handleConfirm = async () => {
+        if (disabled) return
+        onConfirm?.()
 
-        const newCardID = randomID();
+        const newCardID = randomID();
 
-        // cardのレコード登録
-        const text = ref.current.value;
-        const card = {id: newCardID, text: text};
-        await API.graphql(graphqlOperation(createCard, { input: card }));
+        // cardのレコード登録
+        const text = ref.current.value;
+        const card = {id: newCardID, text: text};
+        await API.graphql(graphqlOperation(createCard, { input: card }));
 
-        // orderのレコード登録
-
-        // すでにレコードが有る場合
-        const cardsOrder: any = await API.graphql(graphqlOperation(listOrders));
-        let cardsOrderShaped: any = {}
-        let existOrderLatestNext: any = ""
-        cardsOrder.data.listOrders.items.forEach(item => {
-            existOrderLatestNext = item.next
-            cardsOrderShaped[item.id] = item.next
-        })
-        const order = {id: existOrderLatestNext, next: newCardID}
-        await API.graphql(graphqlOperation(createOrder, { input: order }));
-
-        // まだレコードが無い場合
-        console.log(cid)
-        // 触ったカラムのIDをとる
-        // const order = {id: カラムのID, next: newCardID}
-        // await API.graphql(graphqlOperation(createOrder, { input: order }));
-    }
-    const ref = useAutoFitToContentHeight(value)
+        // orderのレコード登録
+        const columnHasCard: any = await API.graphql(graphqlOperation(getOrder, {id: cid}));
+        if (columnHasCard.data.getOrder === null) {
+            // まだレコードが無い場合
+            const order = {id: cid, next: newCardID}
+            API.graphql(graphqlOperation(createOrder, { input: order }))
+        } else {
+            // すでにレコードが有る場合
+            const cardsOrder: any = await API.graphql(graphqlOperation(listOrders));
+            let cardsOrderShaped: any = {}
+            let existOrderLatestNext: any = ""
+            cardsOrder.data.listOrders.items.forEach(item => {
+                existOrderLatestNext = item.next
+                cardsOrderShaped[item.id] = item.next
+            const order = {id: existOrderLatestNext, next: newCardID}
+            API.graphql(graphqlOperation(createOrder, { input: order }))
+            })
+        }
+    }
+    const ref = useAutoFitToContentHeight(value)
 
     return (
         <Container className={className}>
