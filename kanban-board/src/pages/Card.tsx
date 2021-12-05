@@ -2,19 +2,35 @@ import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
 import * as color from './_color'
 import { CheckIcon as _CheckIcon, TrashIcon } from './icon'
+import API, { graphqlOperation } from '@aws-amplify/api';
+import { deleteCard, deleteOrder } from '../graphql/mutations';
+import { getOrder, listOrders } from '../graphql/queries';
 
 Card.DropArea = DropArea;
 
 export function Card({
+    id,
     text,
     onDragStart,
     onDragEnd
 }: {
+    id: string
     text?: string
     onDragStart?(): void
     onDragEnd?(): void
 }) {
     const [drag, setDrag] = useState(false);
+    const deleteCardFunc = async () => {
+        // cardの削除
+        const card = {id: id};
+        await API.graphql(graphqlOperation(deleteCard, { input: card }));
+        const allOrders: any = await API.graphql(graphqlOperation(listOrders));
+
+        // orderの削除（現状カラムの一番下にあるタスクのみ正常に動作）
+        const deleteOrderID = allOrders.data.listOrders.items.find((v) => v.next === id).id
+        const order = {id: deleteOrderID}
+        await API.graphql(graphqlOperation(deleteOrder, { input: order }));
+    }
     return (
         <Container
             style={{ opacity: drag ? 0.5 : undefined }}
@@ -37,7 +53,9 @@ export function Card({
                     </Link>
                 ),
             )}
-            <DeleteButton />
+            <DeleteButton
+                onClick={deleteCardFunc}
+            />
         </Container>
     )
 }

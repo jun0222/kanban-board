@@ -66,6 +66,7 @@ export function Column({
                 onDrop={() => onCardDrop?.(id)}
             >
                 <Card
+                    id={id}
                     text={text}
                     onDragStart={() => handleCardDragStart(id)}
                     onDragEnd={() => setDraggingCardID(undefined)}
