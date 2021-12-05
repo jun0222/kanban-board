@@ -42,15 +42,20 @@ export function InputForm({
             API.graphql(graphqlOperation(createOrder, { input: order }))
         } else {
             // すでにレコードが有る場合
+            const firstCardNext = columnHasCard.data.getOrder.next;
             const cardsOrder: any = await API.graphql(graphqlOperation(listOrders));
-            let cardsOrderShaped: any = {}
-            let existOrderLatestNext: any = ""
-            cardsOrder.data.listOrders.items.forEach(item => {
-                existOrderLatestNext = item.next
-                cardsOrderShaped[item.id] = item.next
-            const order = {id: existOrderLatestNext, next: newCardID}
+            let nextCard;
+            let nextCardId = firstCardNext;
+
+            for (let i = 1; i < cardsOrder.data.listOrders.items.length; i++) {
+                nextCard = cardsOrder.data.listOrders.items.find((v) => v.id === nextCardId);
+                if (nextCard !== undefined) {
+                    nextCardId = nextCard.next;
+                }
+            }
+            let existOrderLatestNext: any = nextCardId;
+            const order = {id: existOrderLatestNext, next: newCardID};
             API.graphql(graphqlOperation(createOrder, { input: order }))
-            })
         }
     }
     const ref = useAutoFitToContentHeight(value)
