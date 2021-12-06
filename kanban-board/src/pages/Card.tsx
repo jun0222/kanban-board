@@ -4,7 +4,7 @@ import * as color from './_color'
 import { CheckIcon as _CheckIcon, TrashIcon } from './icon'
 import API, { graphqlOperation } from '@aws-amplify/api';
 import { deleteCard, deleteOrder, createOrder } from '../graphql/mutations';
-import { getOrder, listOrders } from '../graphql/queries';
+import { listOrders } from '../graphql/queries';
 
 Card.DropArea = DropArea;
 
@@ -28,31 +28,28 @@ export function Card({
 
         // クリックしたcardがcolumnの一番下かどうか判定
         if (allOrders.data.listOrders.items.find((v) => v.id == id) === undefined) {
-            // columnの一番下にあるorderの削除
-            console.log("一番下！");
+            // columnの一番下
             const deleteOrderID = allOrders.data.listOrders.items.find((v) => v.next === id).id
             const order = {id: deleteOrderID}
             await API.graphql(graphqlOperation(deleteOrder, { input: order }));
         } else {
-            console.log("一番下じゃない!");
-            // propsのidをidとして取得したorderのnextを
+            // columnの一番下以外
+
+            // クリックしたcardの次にあるcardのidを取得
             const nextCardId = allOrders.data.listOrders.items.find((v) => v.id === id).next;
-            console.log(nextCardId, "nextCardId")
-            // 削除
+            
+            // 既存のorderを削除
+            // クリックしたcardのidがnextに格納されているorder
             const deleteOrderID = allOrders.data.listOrders.items.find((v) => v.next === id).id
-            console.log(deleteOrderID, "deleteOrderID")
             const order = {id: deleteOrderID}
-            console.log(order, "order")
             await API.graphql(graphqlOperation(deleteOrder, { input: order }));
-            // 例でいう2: 3も消す、多分idでシンプルに消せば良い
+            // クリックしたcardのidがidに格納されているorder
             const order2 = {id: id}
-            console.log(order2, "order2")
             await API.graphql(graphqlOperation(deleteOrder, { input: order2 }));
-            // propsのidをnextとして取得したorderのnextに入れる。
+
+            // クリックしたcardの一つ前をid、一つ後をnextに格納したorderを作成
             const preCardId = allOrders.data.listOrders.items.find((v) => v.next === id).id;
-            console.log(preCardId, "preCardId")
             const upOrder = {id: preCardId, next: nextCardId};
-            console.log(upOrder, "upOrder")
             await API.graphql(graphqlOperation(createOrder, { input: upOrder }));
         };
     }
