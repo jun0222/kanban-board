@@ -38,6 +38,7 @@ type Columns = {
 }[]
 
 
+
 const reducer = (state: {todos: []}, action: any) => {
   switch (action.type) {
     case GET:
@@ -236,6 +237,8 @@ const Home = () => {
           {columns.map(({ id: columnID, title, cards }) => (
             <Column
               key={columnID}
+              columns={columns}
+              setColumns={setColumns}
               cid={columnID}
               title={title}
               cards={cards}

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, {useState, useRef } from 'react'
 import styled from 'styled-components'
 import * as color from './_color'
 import { CheckIcon as _CheckIcon, TrashIcon } from './icon'
@@ -9,11 +9,13 @@ import { listOrders } from '../graphql/queries';
 Card.DropArea = DropArea;
 
 export function Card({
+    onClickDelete,
     id,
     text,
     onDragStart,
     onDragEnd
 }: {
+    onClickDelete(): void
     id: string
     text?: string
     onDragStart?(): void
@@ -21,8 +23,11 @@ export function Card({
 }) {
     const [drag, setDrag] = useState(false);
     const deleteCardFunc = async () => {
+
+        onClickDelete(id);
+
         // cardの削除
-        const card = {id: id};
+        const card = {id: id};
         await API.graphql(graphqlOperation(deleteCard, { input: card }));
         const allOrders: any = await API.graphql(graphqlOperation(listOrders));
 

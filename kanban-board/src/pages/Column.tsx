@@ -6,6 +6,8 @@ import { PlusIcon } from './icon'
 import { InputForm } from './InputForm'
 
 export function Column({
+    columns,
+    setColumns,
     cid,
     title,
     cards,
@@ -28,6 +30,19 @@ export function Column({
     const confirmInput = () => setText('')
     const cancelInput = () => setInputMode(false)
 
+    
+    const onClickDelete = (deleteCardId) => {
+        const newColumns = [...columns];
+        for (let i = 0; i < newColumns.length; i++) {
+            for (let j = 0; j < newColumns[i].cards.length; j++) {
+                if(newColumns[i].cards[j].id === deleteCardId){
+                    newColumns[i].cards.splice(j, 1);
+                }
+            }
+        }
+        console.log(newColumns)
+        setColumns(newColumns)
+    };
     const [draggingCardID, setDraggingCardID] = useState<string | undefined>(
         undefined,
     )
@@ -66,6 +81,7 @@ export function Column({
                 onDrop={() => onCardDrop?.(id)}
             >
                 <Card
+                    onClickDelete={onClickDelete}
                     id={id}
                     text={text}
                     onDragStart={() => handleCardDragStart(id)}
