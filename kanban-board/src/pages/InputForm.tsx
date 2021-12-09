@@ -8,6 +8,7 @@ import { listOrders, getOrder } from '../graphql/queries'
 import { randomID } from './_util'
 
 export function InputForm({
+    onClickAdd,
     cid,
     value,
     onChange,
@@ -15,6 +16,7 @@ export function InputForm({
     onCancel,
     className,
 }: {
+    onClickAdd(cid: string, id: string, text: string): void
     cid: string
     value?: string
     onChange?(value: string): void
@@ -33,6 +35,9 @@ export function InputForm({
         const text = ref.current.value;
         const card = {id: newCardID, text: text};
         await API.graphql(graphqlOperation(createCard, { input: card }));
+
+        // cardのdom追加
+        onClickAdd(cid, newCardID, text);
 
         // orderのレコード登録
         const columnHasCard: any = await API.graphql(graphqlOperation(getOrder, {id: cid}));
