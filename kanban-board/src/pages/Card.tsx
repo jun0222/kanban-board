@@ -15,7 +15,7 @@ export function Card({
     onDragStart,
     onDragEnd
 }: {
-    onClickDelete(): void
+    onClickDelete(deleteCardId: string): void
     id: string
     text?: string
     onDragStart?(): void

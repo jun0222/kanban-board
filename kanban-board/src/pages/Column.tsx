@@ -42,7 +42,7 @@ export function Column({
         }
         setColumns(newColumns)
     };
-    const onClickDelete = (deleteCardId) => {
+    const onClickDelete = (deleteCardId: string) => {
         const newColumns = [...columns];
         for (let i = 0; i < newColumns.length; i++) {
             for (let j = 0; j < newColumns[i].cards.length; j++) {
@@ -51,7 +51,6 @@ export function Column({
                 }
             }
         }
-        console.log(newColumns)
         setColumns(newColumns)
     };
     const [draggingCardID, setDraggingCardID] = useState<string | undefined>(
