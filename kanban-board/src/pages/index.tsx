@@ -3,7 +3,7 @@ import Amplify, { Auth } from "aws-amplify";
 import API, { graphqlOperation } from '@aws-amplify/api';
 import awsmobile from "../aws-exports";
 import { withAuthenticator } from "aws-amplify-react";
-import { createTodo } from '../graphql/mutations';
+import { createTodo, updateOrder } from '../graphql/mutations';
 import { listCards, listTodos, listColumns, listOrders } from '../graphql/queries';
 import { onCreateTodo } from '../graphql/subscriptions';
 import styled, { createGlobalStyle } from 'styled-components';
@@ -98,7 +98,7 @@ const Home = () => {
     undefined,
   )
 
-  const dropCardTo = (toID: string) => {
+  const dropCardTo = async (toID: string) => {
     const fromID = draggingCardID
     if (!fromID) return
 
@@ -138,6 +138,27 @@ const Home = () => {
             ),
           }
         }
+
+        let newOrder = [];
+        if (newColumn.cards[0] !== undefined) {
+          const firstOrder = {id: newColumn.id, next: newColumn.cards[0].id};
+          newOrder.push(firstOrder);
+        };
+        for (let i = 0; i < newColumn.cards.length; i++) {
+            const continueOrder = {}
+            if(newColumn.cards[i+1] !== undefined){
+              continueOrder.id = newColumn.cards[i].id;
+              continueOrder.next = newColumn.cards[i+1].id;
+              newOrder.push(continueOrder);
+            }
+        }
+        (async function() {
+          for (let i = 0; i < newOrder.length; i++) {
+            const order = {id: newOrder[i].id, next: newOrder[i].next};
+            console.log(order);
+            await API.graphql(graphqlOperation(updateOrder, { input: order }));
+          }
+        })();
 
         return newColumn
       })
