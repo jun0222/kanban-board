@@ -31,11 +31,8 @@ export function Column({
     const cancelInput = () => setInputMode(false)
     const onClickAdd = (cid: string, id: string, text: string) => {
         const newColumns = [...columns];        
-        // 全columnを回ってる
         for (let i = 0; i < newColumns.length; i++) {
-            // cidと一致するidのcolumnsを処理する
             if (newColumns[i].id === cid) {
-                // cidと一致しているので、この中でcardを追加する処理を入れる
                 let newCard = {id: id, text: text};
                 newColumns[i].cards.push(newCard);
             }
