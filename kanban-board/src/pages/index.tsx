@@ -152,12 +152,22 @@ const Home = () => {
               newOrder.push(continueOrder);
             }
         }
+
         (async function() {
-          for (let i = 0; i < newOrder.length; i++) {
-            const order = {id: newOrder[i].id, next: newOrder[i].next};
-            console.log(order);
-            await API.graphql(graphqlOperation(updateOrder, { input: order }));
-          }
+          // 既存のorder全部削除
+          const cardsOrder: any = await API.graphql(graphqlOperation(listOrders));
+          const oldOrderIds = [];
+          cardsOrder.data.listOrders.items.forEach(item => {
+            oldOrderIds.push(item.id);
+          })
+          API.graphql(graphqlOperation(batchDeleteOrder, {ids: oldOrderIds}));
+
+          // 新しいorderを登録
+          const newOrderObjs = [];
+          newOrder.forEach(item => {
+            newOrderObjs.push({id: item.id, next: item.next});
+          })
+          await API.graphql(graphqlOperation(batchAddOrder, {orders: newOrderObjs}));
         })();
 
         return newColumn
@@ -190,16 +200,6 @@ const Home = () => {
   }
 
   useEffect(() => {
-
-    (async function() {
-      // order一括削除用サンプルコード
-      const orderIds = ["J6oGT5gm5jP7", "2"]
-      const orderNexts = ["kOmNXBjmdlBy", "ymEDjlXu9Bew"]
-      await API.graphql(graphqlOperation(batchDeleteOrder, {ids: orderIds}));
-      // order一括登録用サンプルコード
-      const ordersArray = [{id: "J6oGT5gm5jP7", next: "kOmNXBjmdlBy"}, {id: "2", next: "ymEDjlXu9Bew"}];
-      await API.graphql(graphqlOperation(batchAddOrder, {orders: ordersArray}));
-    })();
 
     ;(async () => {
       const todoColumns: any = await API.graphql(graphqlOperation(listColumns));
