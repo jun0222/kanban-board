@@ -1,0 +1,16 @@
+#set($data = [])
+#set( $createdAt = $util.time.nowISO8601() )
+#foreach($item in ${ctx.args.orders})
+    $util.qr($item.put("id", $util.defaultIfNullOrBlank($item.id, $util.autoId())))
+    $util.qr($item.put("createdAt", $util.defaultIfNull($item.createdAt, $createdAt)))
+    $util.qr($item.put("updatedAt", $util.defaultIfNull($item.updatedAt, $createdAt)))
+    $util.qr($data.add($util.dynamodb.toMapValues($item)))
+#end
+
+{
+    "version" : "2018-05-29",
+    "operation" : "BatchPutItem",
+    "tables" : {
+        "Order-2vc2qvijxfbyrobeimpxqrxa4y-dev": $util.toJson($data)
+    }
+}

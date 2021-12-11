@@ -25,3 +25,11 @@ type Order @model {
     createdAt: AWSDateTime
     updatedAt: AWSDateTime
 }
+input OrderInput {
+    id: ID
+    next: String!
+}
+type Mutation {
+    batchAddOrder(orders: [OrderInput]): [Order]
+    batchDeleteOrder(ids: [ID]): [Order]
+}

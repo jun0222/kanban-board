@@ -3,7 +3,7 @@ import Amplify, { Auth } from "aws-amplify";
 import API, { graphqlOperation } from '@aws-amplify/api';
 import awsmobile from "../aws-exports";
 import { withAuthenticator } from "aws-amplify-react";
-import { createTodo, updateOrder } from '../graphql/mutations';
+import { batchDeleteOrder, batchAddOrder, createTodo, updateOrder } from '../graphql/mutations';
 import { listCards, listTodos, listColumns, listOrders } from '../graphql/queries';
 import { onCreateTodo } from '../graphql/subscriptions';
 import styled, { createGlobalStyle } from 'styled-components';
@@ -190,6 +190,16 @@ const Home = () => {
   }
 
   useEffect(() => {
+
+    (async function() {
+      // order一括削除用サンプルコード
+      const orderIds = ["J6oGT5gm5jP7", "2"]
+      const orderNexts = ["kOmNXBjmdlBy", "ymEDjlXu9Bew"]
+      await API.graphql(graphqlOperation(batchDeleteOrder, {ids: orderIds}));
+      // order一括登録用サンプルコード
+      const ordersArray = [{id: "J6oGT5gm5jP7", next: "kOmNXBjmdlBy"}, {id: "2", next: "ymEDjlXu9Bew"}];
+      await API.graphql(graphqlOperation(batchAddOrder, {orders: ordersArray}));
+    })();
 
     ;(async () => {
       const todoColumns: any = await API.graphql(graphqlOperation(listColumns));

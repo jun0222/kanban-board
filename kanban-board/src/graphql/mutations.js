@@ -1,6 +1,26 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const batchAddOrder = /* GraphQL */ `
+  mutation BatchAddOrder($orders: [OrderInput]) {
+    batchAddOrder(orders: $orders) {
+      id
+      next
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const batchDeleteOrder = /* GraphQL */ `
+  mutation BatchDeleteOrder($ids: [ID]) {
+    batchDeleteOrder(ids: $ids) {
+      id
+      next
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createCard = /* GraphQL */ `
   mutation CreateCard(
     $input: CreateCardInput!
