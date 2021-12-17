@@ -53,7 +53,7 @@ export function InputForm({
             let nextCardId = firstCardNext;
 
             for (let i = 1; i < cardsOrder.data.listOrders.items.length; i++) {
-                nextCard = cardsOrder.data.listOrders.items.find((v) => v.id === nextCardId);
+                nextCard = cardsOrder.data.listOrders.items.find((v: any) => v.id === nextCardId);
                 if (nextCard !== undefined) {
                     nextCardId = nextCard.next;
                 }

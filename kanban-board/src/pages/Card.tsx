@@ -32,20 +32,20 @@ export function Card({
         const allOrders: any = await API.graphql(graphqlOperation(listOrders));
 
         // クリックしたcardがcolumnの一番下かどうか判定
-        if (allOrders.data.listOrders.items.find((v) => v.id == id) === undefined) {
+        if (allOrders.data.listOrders.items.find((v: any) => v.id == id) === undefined) {
             // columnの一番下
-            const deleteOrderID = allOrders.data.listOrders.items.find((v) => v.next === id).id
+            const deleteOrderID = allOrders.data.listOrders.items.find((v: any) => v.next === id).id
             const order = {id: deleteOrderID}
             await API.graphql(graphqlOperation(deleteOrder, { input: order }));
         } else {
             // columnの一番下以外
 
             // クリックしたcardの次にあるcardのidを取得
-            const nextCardId = allOrders.data.listOrders.items.find((v) => v.id === id).next;
+            const nextCardId = allOrders.data.listOrders.items.find((v: any) => v.id === id).next;
             
             // 既存のorderを削除
             // クリックしたcardのidがnextに格納されているorder
-            const deleteOrderID = allOrders.data.listOrders.items.find((v) => v.next === id).id
+            const deleteOrderID = allOrders.data.listOrders.items.find((v: any) => v.next === id).id
             const order = {id: deleteOrderID}
             await API.graphql(graphqlOperation(deleteOrder, { input: order }));
             // クリックしたcardのidがidに格納されているorder
@@ -53,7 +53,7 @@ export function Card({
             await API.graphql(graphqlOperation(deleteOrder, { input: order2 }));
 
             // クリックしたcardの一つ前をid、一つ後をnextに格納したorderを作成
-            const preCardId = allOrders.data.listOrders.items.find((v) => v.next === id).id;
+            const preCardId = allOrders.data.listOrders.items.find((v: any) => v.next === id).id;
             const upOrder = {id: preCardId, next: nextCardId};
             await API.graphql(graphqlOperation(createOrder, { input: upOrder }));
         };
