@@ -14,6 +14,8 @@ export function Column({
     onCardDragStart,
     onCardDrop
 }: {
+    columns: any
+    setColumns: any
     cid: string
     title?: string
     cards: {
