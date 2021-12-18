@@ -1,4 +1,0 @@
-preBuild:
-  commands:
-    - nvm use stable #安定版を利用
-    - curl -o- -L https://yarnpkg.com/install.sh | bash #安定版を再インストール
