@@ -1,6 +1,6 @@
 {
   "auth": {
-    "kanbanboarde7e0cdf8": {
+    "kanbanboardc7681d9e": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -35,7 +35,7 @@
           "defaultAuthentication": {
             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
             "userPoolConfig": {
-              "userPoolId": "authkanbanboarde7e0cdf8"
+              "userPoolId": "authkanbanboardc7681d9e"
             }
           },
           "additionalAuthenticationProviders": []

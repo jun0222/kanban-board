@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "kanbanboarde7e0cdf8_identitypool_e7e0cdf8",
+    "identityPoolName": "kanbanboardc7681d9e_identitypool_c7681d9e",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "kanbane7e0cdf8",
-    "userPoolName": "kanbanboarde7e0cdf8_userpool_e7e0cdf8",
+    "resourceNameTruncated": "kanbanc7681d9e",
+    "userPoolName": "kanbanboardc7681d9e_userpool_c7681d9e",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -29,10 +29,10 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "kanbane7e0cdf8_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "kanbanc7681d9e_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "e7e0cdf8",
-    "resourceName": "kanbanboarde7e0cdf8",
+    "sharedId": "c7681d9e",
+    "resourceName": "kanbanboardc7681d9e",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
