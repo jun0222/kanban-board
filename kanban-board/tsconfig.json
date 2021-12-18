@@ -15,7 +15,8 @@
     "jsx": "preserve",
     "incremental": true,
     "strictNullChecks": false,
-    "allowUnusedLabels": true
+    "allowUnusedLabels": true,
+    "noImplicitAny": false
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
