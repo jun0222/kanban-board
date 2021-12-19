@@ -2,15 +2,12 @@ import React, {useState, useEffect, useReducer } from 'react';
 import Amplify, { Auth } from "aws-amplify";
 import API, { graphqlOperation } from '@aws-amplify/api';
 import awsmobile from "../aws-exports";
-import { batchDeleteOrder, batchAddOrder, createTodo, updateOrder } from '../graphql/mutations';
-import { listCards, listTodos, listColumns, listOrders, getOrder } from '../graphql/queries';
-import { onCreateTodo } from '../graphql/subscriptions';
+import { batchDeleteOrder, batchAddOrder } from '../graphql/mutations';
+import { listCards, listColumns, listOrders } from '../graphql/queries';
 import styled, { createGlobalStyle } from 'styled-components';
-import * as color from './_color';
 import { Header } from './Header';
 import { Column } from './Column';
-import produce from 'immer';
-import { randomID, sortBy } from './_util'
+import { sortBy } from './_util'
 
 // Amplifyの設定を行う
 Amplify.configure(awsmobile)
