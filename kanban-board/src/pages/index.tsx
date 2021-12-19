@@ -163,13 +163,11 @@ const Home = () => {
         const executeSortOrder = async () => {
           const oldOrder: any = await API.graphql(graphqlOperation(listOrders));
           const oldOrderIds = await makeDeleteOldOrderIds(oldOrder);
-          console.log("oldOrderIds", oldOrderIds)
           API.graphql(graphqlOperation(batchDeleteOrder, {ids: oldOrderIds})); // awaitすると次に進まない。batchDeleteOrderはpromiseを返さない？
 
           setTimeout(async function(){
             const newOrder = await getNewOrder();
             const newOrderObjs = await makeNewOrderObjs(newOrder);
-            console.log("newOrderObjs", newOrderObjs)
             await API.graphql(graphqlOperation(batchAddOrder, {orders: newOrderObjs}));
           }, 500);
         };
