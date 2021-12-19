@@ -4,7 +4,7 @@ import API, { graphqlOperation } from '@aws-amplify/api';
 import awsmobile from "../aws-exports";
 import { withAuthenticator } from "aws-amplify-react";
 import { batchDeleteOrder, batchAddOrder, createTodo, updateOrder } from '../graphql/mutations';
-import { listCards, listTodos, listColumns, listOrders } from '../graphql/queries';
+import { listCards, listTodos, listColumns, listOrders, getOrder } from '../graphql/queries';
 import { onCreateTodo } from '../graphql/subscriptions';
 import styled, { createGlobalStyle } from 'styled-components';
 import * as color from './_color';
@@ -92,7 +92,7 @@ function signOut(){
 }
 
 const Home = () => {
-  const [columns, setColumns] = useState<Columns>([])
+  const [columns, setColumns] = useState<any>([])
 
   const [draggingCardID, setDraggingCardID] = useState<string | undefined>(
     undefined,
@@ -139,36 +139,62 @@ const Home = () => {
           }
         }
 
-        let newOrder = [];
-        if (newColumn.cards[0] !== undefined) {
-          const firstOrder = {id: newColumn.id, next: newColumn.cards[0].id};
-          newOrder.push(firstOrder);
+        // 既存のorder全部削除する処理
+        function makeDeleteOldOrderIds(oldOrder) {
+          return new Promise((resolve, reject) => {
+            const oldOrderIds = [];
+            oldOrder.data.listOrders.items.forEach(item => {
+              oldOrderIds.push(item.id);
+            })
+            resolve(oldOrderIds);
+          })
         };
-        for (let i = 0; i < newColumn.cards.length; i++) {
-            const continueOrder = {}
-            if(newColumn.cards[i+1] !== undefined){
-              continueOrder.id = newColumn.cards[i].id;
-              continueOrder.next = newColumn.cards[i+1].id;
-              newOrder.push(continueOrder);
+
+        // 新しいorderを取得する処理
+        function getNewOrder() {
+          return new Promise((resolve, reject) => {
+            const newOrder = [];
+            if (newColumn.cards[0] !== undefined) {
+              const firstOrder = {id: newColumn.id, next: newColumn.cards[0].id};
+              newOrder.push(firstOrder);
+            };
+            for (let i = 0; i < newColumn.cards.length; i++) {
+                const continueOrder: any = {}
+                if(newColumn.cards[i+1] !== undefined){
+                  continueOrder.id = newColumn.cards[i].id;
+                  continueOrder.next = newColumn.cards[i+1].id;
+                  newOrder.push(continueOrder);
+                }
             }
+            resolve(newOrder);
+          })
         }
 
-        (async function() {
-          // 既存のorder全部削除
-          const cardsOrder: any = await API.graphql(graphqlOperation(listOrders));
-          const oldOrderIds = [];
-          cardsOrder.data.listOrders.items.forEach(item => {
-            oldOrderIds.push(item.id);
+        function makeNewOrderObjs(newOrder) {
+          return new Promise((resolve, reject) => {
+            const newOrderObjs = [];
+            newOrder.forEach(item => {
+              newOrderObjs.push({id: item.id, next: item.next});
+            })
+            resolve(newOrderObjs);
           })
-          API.graphql(graphqlOperation(batchDeleteOrder, {ids: oldOrderIds}));
+        };
 
-          // 新しいorderを登録
-          const newOrderObjs = [];
-          newOrder.forEach(item => {
-            newOrderObjs.push({id: item.id, next: item.next});
-          })
-          await API.graphql(graphqlOperation(batchAddOrder, {orders: newOrderObjs}));
-        })();
+        // sortの実行
+        const executeSortOrder = async () => {
+          const oldOrder: any = await API.graphql(graphqlOperation(listOrders));
+          const oldOrderIds = await makeDeleteOldOrderIds(oldOrder);
+          console.log("oldOrderIds", oldOrderIds)
+          API.graphql(graphqlOperation(batchDeleteOrder, {ids: oldOrderIds})); // awaitすると次に進まない。batchDeleteOrderはpromiseを返さない？
+
+          setTimeout(async function(){
+            const newOrder = await getNewOrder();
+            const newOrderObjs = await makeNewOrderObjs(newOrder);
+            console.log("newOrderObjs", newOrderObjs)
+            await API.graphql(graphqlOperation(batchAddOrder, {orders: newOrderObjs}));
+          }, 500);
+        };
+        executeSortOrder();
 
         return newColumn
       })
