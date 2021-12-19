@@ -2,7 +2,6 @@ import React, {useState, useEffect, useReducer } from 'react';
 import Amplify, { Auth } from "aws-amplify";
 import API, { graphqlOperation } from '@aws-amplify/api';
 import awsmobile from "../aws-exports";
-import { withAuthenticator } from "aws-amplify-react";
 import { batchDeleteOrder, batchAddOrder, createTodo, updateOrder } from '../graphql/mutations';
 import { listCards, listTodos, listColumns, listOrders, getOrder } from '../graphql/queries';
 import { onCreateTodo } from '../graphql/subscriptions';
@@ -72,13 +71,6 @@ const signUpConfig = {
           type: 'password'
       }
   ]
-}
-
-// SingOut
-function signOut(){
-  Auth.signOut()
-  .then()
-  .catch();
 }
 
 const Home = () => {
@@ -255,8 +247,6 @@ const Home = () => {
   return (
     <div className="App">
       {/* カンバンボード用UI */}
-      <p>user: {user!= null && user.username}</p>
-      <button onClick={signOut}>Sign out</button>
       <div>
       <GlobalStyle />
       <Container>
@@ -358,5 +348,4 @@ background-color: ${color.White};
 cursor: move;
 `
 
-// Appコンポーネントをラップする
-export default withAuthenticator(Home, false, [], null, {signUpConfig});
+export default Home;
