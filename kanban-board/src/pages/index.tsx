@@ -19,14 +19,6 @@ Amplify.configure(awsmobile)
 const GET = 'GET';
 const CREATE = 'CREATE';
 
-type Todo = {
-  id: string,
-  title: string,
-  detail: string,
-  createdAt: string,
-  updatedAt: string
-}
-
 type Columns = {
   id: string
   title?: string
@@ -36,8 +28,6 @@ type Columns = {
     text?: string
   }[]
 }[]
-
-
 
 const reducer = (state: {todos: []}, action: any) => {
   switch (action.type) {
@@ -217,14 +207,6 @@ const Home = () => {
     }
   }
 
-  async function create(e: any) {
-    e.preventDefault();
-    setTitle('')
-    setDetail('')
-    const todo = { title:title, detail:detail };
-    await API.graphql(graphqlOperation(createTodo, { input: todo }));
-  }
-
   useEffect(() => {
 
     ;(async () => {
@@ -267,16 +249,6 @@ const Home = () => {
 
     getColumn();
 
-    const client = API.graphql(graphqlOperation(onCreateTodo));
-    ((client: any) => {
-      const subscription = client.subscribe({
-        next: (eventData: any) => {
-          const todo = eventData.value.data.onCreateTodo;
-          dispatch({ type: CREATE, todo });
-        }
-      });
-      return () => subscription.unsubscribe();
-    })(client);
   }, []);
 
 
