@@ -74,7 +74,7 @@ const signUpConfig = {
 }
 
 const Home = () => {
-  const [columns, setColumns] = useState<any>([])
+  const [columns, setColumns] = useState<Columns>([])
 
   const [draggingCardID, setDraggingCardID] = useState<string | undefined>(
     undefined,
@@ -293,20 +293,6 @@ flex-flow: column;
 height: 100%;
 `
 
-const Logo = styled.div`
-height: 100%;
-padding: 16px 0;
-overflow-y: auto;
-`
-
-const CardFilter = styled.input`
-display: flex;
-align-items: center;
-min-width: 300px;
-border: solid 1px ${color.Silver};
-border-radius: 3px;
-`
-
 const MainArea = styled.div`
 height: 100%;
 padding: 16px 0;
@@ -329,23 +315,6 @@ overflow-x: auto;
   flex: 0 0 16px;
   content: '';
 }
-`
-
-const ColumnHeader = styled.div`
-display: flex;
-justify-content: flex-start;
-align-items: center;
-padding: 8px;
-`
-
-const Card = styled.div`
-position: relative;
-border: solid 1px ${color.Silver};
-border-radius: 6px;
-box-shadow: 0 1px 3px hsla(0, 0%, 7%, 0.1);
-padding: 8px 32px;
-background-color: ${color.White};
-cursor: move;
 `
 
 export default Home;
